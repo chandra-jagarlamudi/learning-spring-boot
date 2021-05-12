@@ -1,46 +1,24 @@
 ### Spring Boot Application
-#### SpringApplication
-The **SpringApplication** class provides a convenient way to bootstrap a Spring Boot application that is started from a **main()** method. In many situations, you can delegate to the static SpringApplication.run method, as shown in the following example:
+#### Application Events
+Spring Boot applications publish various events during the application startup, we can use listeners to react to these events.   
 
-	public static void main(String[] args) {
-		SpringApplication.run(MySpringConfiguration.class, args);
-	}
+The `ApplicationStartedEvent` is one such event published by Spring Boot after the context has been created but before `Application` and `CommandLine` runners have been called. Similarly `ApplicationReadyEvent` is published after `Application` and `CommandLine` have been called. It indicates that the application is ready to service requests.   
 
-Startup information logging can be turned off by setting   
-> spring.main.log-startup-info=false     
+This Spring Boot application is a simple web application that triggers a web request in reaction to the `ApplicationReadyEvent`. The request is made using WebClient, so we add `spring-boot-starter-webflux` to POM file for building WebFlux applications using Spring Framework's Reactive Web support.
 
-This will also turn off logging of the application’s active profiles
+Here is the main event listener class code
 
-** Customizing the Banner **   
-The banner that is printed on start up can be changed by adding a `banner.txt` file to your classpath or by setting the `spring.banner.location` property to the location of such a file. If the file has an encoding other than UTF-8, you can set `spring.banner.charset`. In addition to a text file, you can also add a `banner.gif`, `banner.jpg`, or `banner.png` image file to your classpath or set the `spring.banner.image.location` property. Images are converted into an ASCII art representation and printed above any text banner.   
-
-> spring.main.banner-mode=off    
-> spring.banner.location=classpath:custom-banner.txt     
-> spring.banner.image.location=classpath:banner.gif    
-
-If the **SpringApplication** defaults are not to your taste, you can instead create a local instance and customize it. For example, to turn off the banner, you could write:   
-
-	public static void main(String[] args) {
-    	SpringApplication app = new SpringApplication(MySpringConfiguration.class);
-    	app.setBannerMode(Banner.Mode.OFF);
-    	app.run(args);
-	}
-
-Here is the custom banner we will create
-
-	###########################################################################
-	+-+ +-+ +-+ +-+ +-+ +-+ +-+ +-+   +-+ +-+ +-+ +-+ +-+ +-+   +-+ +-+ +-+ +-+
-	|L| |e| |a| |r| |n| |i| |n| |g|   |S| |p| |r| |i| |n| |g|   |B| |o| |o| |t|
-	+-+ +-+ +-+ +-+ +-+ +-+ +-+ +-+   +-+ +-+ +-+ +-+ +-+ +-+   +-+ +-+ +-+ +-+
+	@Component
+	public class MyApplicationReadyEvent {
+		private static final Logger logger = LoggerFactory.getLogger(MyApplicationReadyEvent.class);
 	
-	Application Name: learning-spring-boot
-	Application Version: 0.0.1-SNAPSHOT
-	Spring Boot:  (v2.4.5)
-	###########################################################################
-
-
-**Running the application**   
-When you run the application from IDE's like eclipse or IntelliJ you won't be able to see all the new properties added to the banner.txt file, `Application Name` and `Application Version`. To see the new properties you have to `package` and `run` the application through console so that `MANIFEST.MF` is created. `MANIFEST.MF` file has values for the additional fields we added to the banner.txt file.     
+	    @EventListener(ApplicationReadyEvent.class)
+	    public void applicationReady() {
+			//we make the call to http://time.jsontest.com/ and log the time.
+	    }
+	}
 	
-	$ mvn package    
-	$ java -jar .\target\learning-spring-boot-0.0.1-SNAPSHOT.jar
+On running the application you see the log entry
+
+	2021-05-12 16:26:23.672  INFO 11212 --- [           main] c.r.s.event.MyApplicationReadyEvent      : Working on My Application Ready Event
+	2021-05-12 16:26:24.036  INFO 11212 --- [ctor-http-nio-3] c.r.s.event.MyApplicationReadyEvent      : Web client response: TimeResponse{date='05-12-2021', unixtime=null, time='09:26:24 PM'}
