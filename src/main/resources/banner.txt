@@ -1,0 +1,10 @@
+${AnsiColor.YELLOW}###########################################################################${AnsiColor.YELLOW}
+${AnsiColor.GREEN}+-+ +-+ +-+ +-+ +-+ +-+ +-+ +-+   +-+ +-+ +-+ +-+ +-+ +-+   +-+ +-+ +-+ +-+${AnsiColor.GREEN}
+${AnsiColor.GREEN}|L| |e| |a| |r| |n| |i| |n| |g|   |S| |p| |r| |i| |n| |g|   |B| |o| |o| |t|${AnsiColor.GREEN}
+${AnsiColor.GREEN}+-+ +-+ +-+ +-+ +-+ +-+ +-+ +-+   +-+ +-+ +-+ +-+ +-+ +-+   +-+ +-+ +-+ +-+${AnsiColor.GREEN}
+ 
+${AnsiColor.GREEN}Application Name: ${application.title}${AnsiColor.GREEN}
+${AnsiColor.GREEN}Application Version: ${application.version} ${application.formatted-version}${AnsiColor.GREEN}
+${AnsiColor.GREEN}Spring Boot: ${spring-boot.version} ${spring-boot.formatted-version}${AnsiColor.GREEN}
+${AnsiColor.YELLOW}###########################################################################${AnsiColor.YELLOW}
+${AnsiColor.DEFAULT}
